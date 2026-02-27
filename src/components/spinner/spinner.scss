@@ -1,0 +1,52 @@
+.marvel-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 40px;
+}
+
+/* Красное вращающееся кольцо */
+.marvel-spinner__ring {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 6px solid rgba(0, 0, 0, 0.1);
+  border-top: 6px solid #e62429; // Marvel red
+  border-right: 6px solid #e62429;
+  animation: marvel-spin 0.7s linear infinite;
+  box-shadow:
+    0 0 10px #e62429,
+    0 0 25px rgba(230, 36, 41, 0.6);
+}
+
+/* Надпись */
+.marvel-spinner__text {
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: 14px;
+  color: #e62429;
+  text-transform: uppercase;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+
+/* Анимация вращения */
+@keyframes marvel-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Пульсация текста */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
