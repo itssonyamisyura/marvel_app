@@ -17,6 +17,7 @@ class MarvelService {
         const res = await this.getResource(`${this._apiBase}characters?limit=20&${this._apiKey}`); // get data in json fromat
         return res.data.results.map(this._transformCharacter); // form array with new objects
     }
+    
 
     getNineCharacters = async () => {
         const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=&${this._apiKey}`); 
@@ -35,9 +36,10 @@ class MarvelService {
             description: char.description,
             thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension} `,
             homepage: char.urls[0].url,
-            wiki: char.urls[1].url 
+            wiki: char.urls[1].url,
+            comics: char.comics.items
         }
-    } // get data and return transformed object
+    } // get data and return transformed object 
 }
 
 export default MarvelService;
