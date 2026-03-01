@@ -19,6 +19,11 @@ class CharList extends Component {
 
     componentDidMount() {
         this.onRequest(this.state.offset);
+        window.addEventListener('scroll', this.onScroll);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('scroll', this.onScroll);
     }
 
     onRequest = (offset) => {
@@ -45,6 +50,23 @@ class CharList extends Component {
             offset: state.offset + 9,
             charEnded: ended
         })) 
+    }
+
+    onScroll = () => {
+        const {offset, newItemLoading, loading, error, charEnded} = this.state;
+
+        // если уже грузим или дошли до конца — ничего не делаем
+        if (newItemLoading || loading || error || charEnded) return;
+
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const fullHeight = document.documentElement.scrollHeight;
+
+        // если почти внизу (за 100px до конца) — грузим еще
+        if (scrollTop + windowHeight >= fullHeight - 100) {
+            this.onRequest(offset)
+        }
+
     }
 
     onError = () => {
