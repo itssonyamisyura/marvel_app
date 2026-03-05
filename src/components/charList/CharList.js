@@ -1,60 +1,60 @@
 import './charList.scss';
-import { Component } from 'react';
+import { useState, useEffect, useRef, use } from 'react';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../spinner/spinner';
 import ErrorMessage from '../errorMessage/errorMessage';
 
-class CharList extends Component {
+const CharList = (props) => {
 
-    state = {
-        charList: [],
-        loading: true,
-        error: false,
-        offset: 0,
-        newItemLoading: false,
-        charEnded: false
-    }
+    const [charList, setCharList] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [offset, setOffset] = useState(0);
+    const [newItemLoading, setNewItemLoading] = useState(false);
+    const [charEnded, setCharEnded] = useState(false);
 
-    marvelService = new MarvelService(); 
 
-    componentDidMount() {
-        this.onRequest(this.state.offset);
-        window.addEventListener('scroll', this.onScroll);
-    }
+    const marvelService = new MarvelService(); 
 
-    componentWillUnmount() {
-        window.removeEventListener('scroll', this.onScroll);
-    }
+    useEffect(() => {
+        onRequest(offset)
+    }, []) //выполнить один раз после первого рендера
 
-    onRequest = (offset) => {
+    useEffect(() => { //подписка на scroll
+        window.addEventListener('scroll', onScroll);
+
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+        };
+    }, [offset, loading, newItemLoading, error, charEnded]);
+
+
+    const onRequest = (offset) => {
         if (offset === 0) {
-            this.setState({ loading: true });
+            setLoading(true);
         } else {
-            this.setState({ newItemLoading: true });
+            setNewItemLoading(true);
         }
-        this.marvelService.getNineCharacters(offset)
-            .then(this.onCharListLoaded)
-            .catch(this.onError)
+        marvelService
+            .getNineCharacters(offset)
+            .then(onCharListLoaded)
+            .catch(onError)
     }
 
-    onCharListLoaded = (newChars) => {
+    const onCharListLoaded = (newChars) => {
         let ended = false;
         if (newChars.length < 9) {
             ended = true;
-        }
+        } 
 
-        this.setState((state) => ({
-            charList: [...state.charList, ...newChars], //Возьми старых персонажей, добавь к ним новых
-            loading: false,
-            newItemLoading: false,
-            offset: state.offset + 9,
-            charEnded: ended
-        })) 
+        setCharList(prev => [...prev, ...newChars]);
+        setLoading(false);
+        setNewItemLoading(false);
+        setOffset(prev => prev + 9);
+        setCharEnded(ended);
     }
 
-    onScroll = () => {
-        const {offset, newItemLoading, loading, error, charEnded} = this.state;
-
+    const onScroll = () => {
         // если уже грузим или дошли до конца — ничего не делаем
         if (newItemLoading || loading || error || charEnded) return;
 
@@ -64,43 +64,40 @@ class CharList extends Component {
 
         // если почти внизу (за 100px до конца) — грузим еще
         if (scrollTop + windowHeight >= fullHeight - 100) {
-            this.onRequest(offset)
+            onRequest(offset)
         }
-
     }
 
-    onError = () => {
-        this.setState({
-            loading: false, 
-            newItemLoading: false,
-            error: true
-        })
+    const onError = () => {
+        setLoading(false);
+        setNewItemLoading(false);
+        setError(true);
     }
 
-    itemRefs = [];
 
-    setRef = (ref, i) => {
-        this.itemRefs[i] = ref;
+    const itemRefs = useRef([]);
+
+    const setRef = (ref, i) => {
+        itemRefs.current[i] = ref;
     }
 
-    focusOnItem = (id) => {
-        this.itemRefs.forEach(item => item.classList.remove('char__item_selected'));
-        this.itemRefs[id].classList.add('char__item_selected');
-        this.itemRefs[id].focus();
+    const focusOnItem = (id) => {
+        itemRefs.current.forEach(item => item.classList.remove('char__item_selected'));
+        itemRefs.current[id].classList.add('char__item_selected');
+        itemRefs.current[id].focus();
     }
 
-    // Этот метод создан для оптимизации, 
-    // чтобы не помещать такую конструкцию в метод render
-    renderItems(arr) {
+
+    function renderItems(arr) {
         const items = arr.map((item, i) => {
             return (
                 <li className="char__item"
                 tabIndex={0}
-                ref={(ref) => this.setRef(ref, i)}
+                ref={(ref) => setRef(ref, i)}
                 key={item.id}
                 onClick={() => {
-                    this.props.onCharSelected(item.id);
-                    this.focusOnItem(i);
+                    props.onCharSelected(item.id);
+                    focusOnItem(i);
                 }}
                 >
                     <img src={item.thumbnail} alt={item.name}/>
@@ -108,7 +105,7 @@ class CharList extends Component {
                 </li>
             )
         });
-         // конструкция вынесена для центровки спиннера/ошибки
+
         return(
         <ul className="char__grid">
             {items}
@@ -116,33 +113,31 @@ class CharList extends Component {
         )
     }
 
-    render() {
-        const {charList, loading, error, offset, newItemLoading, charEnded} = this.state;
-        const items = this.renderItems(charList);
 
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(error || loading) ? items : null;
-        
-        return (
-            <div className="char__list">
-                {errorMessage}
-                {spinner} 
-                {content}
+    const items = renderItems(charList);
+
+    const errorMessage = error ? <ErrorMessage/> : null;
+    const spinner = loading ? <Spinner/> : null;
+    const content = !(error || loading) ? items : null;
     
-                <button 
-                    type='button'
-                    className="button button__main button__long"
-                    onClick={() => {
-                        this.onRequest(offset);
-                    }}
-                    disabled={newItemLoading}
-                    style={{display: charEnded ? 'none' : 'block'}} >
-                    <div className="inner">load more</div>
-                </button>
-            </div>
-        )
-    }
+    return (
+        <div className="char__list">
+            {errorMessage}
+            {spinner} 
+            {content}
+
+            <button 
+                type='button'
+                className="button button__main button__long"
+                onClick={() => {
+                    onRequest(offset);
+                }}
+                disabled={newItemLoading}
+                style={{display: charEnded ? 'none' : 'block'}} >
+                <div className="inner">load more</div>
+            </button>
+        </div>
+    )
 }
 
 export default CharList;
