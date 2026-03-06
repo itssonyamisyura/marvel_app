@@ -1,59 +1,39 @@
 import { useState, useEffect } from 'react';
 import Spinner from '../spinner/spinner'; 
 import ErrorMessage from '../errorMessage/errorMessage'
-import MarvelService from '../../services/MarvelService';
+import useMarvelService from '../../services/MarvelService';
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 
 const RandomChar = () => {
-
     const [char, setChar] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
 
-    const marvelService = new MarvelService(); 
-
+    const {loading, error, getCharacter, clearError} = useMarvelService();
+    
     useEffect(() => {
         updateChar();
+        const timerId = setInterval(updateChar, 60000);
+
+        return () => {
+            clearInterval(timerId)
+        }
     }, [])
-
-    // useEffect(() => {
-    //     updateChar();
-    //     const timerId = setInterval(updateChar, 60000);
-
-    //     return () => {
-    //         clearInterval(timerId)
-    //     }
-    // }, [])
 
     const onCharLoaded = (char) => { 
         setChar(char);
-        setLoading(false);
-    }
-
-    const onCharLoading = () => {
-        setLoading(true);
-    }
-
-    const onError = () => {
-        setLoading(false);
-        setError(true);
     }
 
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (20) + 1);
-        onCharLoading();
-        marvelService
-            .getCharacter(id)
-            .then(onCharLoaded)
-            .catch(onError) // error can happen during server request
+            getCharacter(id)
+            .then(onCharLoaded);
     }
 
-      
     const errorMessage = error ? <ErrorMessage/> : null;
     const spinner = loading ? <Spinner/> : null;
-    const content = !(error || loading) ? <View char={char}/> : null;
+    const content = !(loading || error || !char) ? <View char={char} /> : null;
 
     return (
         <div className="randomchar">
