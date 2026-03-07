@@ -1,4 +1,5 @@
 import { useHttp } from "../hooks/http.hook";
+import ironman from '../resources/img/iron-man.jpg';
 
 const useMarvelService = () => {
     const {loading, request, error, clearError} = useHttp();
@@ -34,11 +35,15 @@ const useMarvelService = () => {
 
 
     const _transformCharacter = (char) => {
+        let thumbnail = `${char.thumbnail.path}.${char.thumbnail.extension}`;
+        if (char.id === 1) {
+            thumbnail = ironman;
+        }
         return {
             id: char.id, 
             name: char.name,
             description: char.description,
-            thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension} `,
+            thumbnail,
             homepage: char.urls[0].url,
             wiki: char.urls[1].url,
             comics: char.comics.items
