@@ -1,5 +1,6 @@
 import { useHttp } from "../hooks/http.hook";
 import ironman from '../resources/img/iron-man.jpg';
+import america from '../resources/img/america.jpg';
 
 const useMarvelService = () => {
     const {loading, request, error, clearError} = useHttp();
@@ -38,6 +39,8 @@ const useMarvelService = () => {
         let thumbnail = `${char.thumbnail.path}.${char.thumbnail.extension}`;
         if (char.id === 1) {
             thumbnail = ironman;
+        } else if (char.id === 2) {
+            thumbnail = america;
         }
         return {
             id: char.id, 
