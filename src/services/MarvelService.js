@@ -13,7 +13,12 @@ const useMarvelService = () => {
     ); // get data in json fromat
         return res.data.results.map(_transformCharacter); // form array with new objects
     }
-    
+
+    const getCharacterByName = async (name) => {
+        const res = await request(`${_apiBase}characters?name=${name}&${_apiKey}`);
+        return res.data.results.map(_transformCharacter); 
+    }    
+
     const getNineCharacters = async (offset = 0) => {
         const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`); 
         return res.data.results.map(_transformCharacter); 
@@ -66,7 +71,7 @@ const useMarvelService = () => {
         }
     }
 
-    return {loading, error, getAllCharacters, getCharacter, getNineCharacters, clearError, getAllComics, getComic}
+    return {loading, error, getAllCharacters, getCharacter, getNineCharacters, clearError, getAllComics, getComic, getCharacterByName}
 }
 
 export default useMarvelService;
