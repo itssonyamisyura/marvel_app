@@ -3,7 +3,7 @@ import ironman from '../resources/img/iron-man.jpg';
 import america from '../resources/img/america.jpg';
 
 const useMarvelService = () => {
-    const {loading, request, error, clearError} = useHttp();
+    const {request, clearError, process, setProcess} = useHttp();
 
     const _apiBase = 'https://marvel-server-zeta.vercel.app/';
     const _apiKey = 'apikey=d4eecb0c66dedbfae4eab45d312fc1df';
@@ -71,7 +71,7 @@ const useMarvelService = () => {
         }
     }
 
-    return {loading, error, getAllCharacters, getCharacter, getNineCharacters, clearError, getAllComics, getComic, getCharacterByName}
+    return { getAllCharacters, getCharacter, getNineCharacters, clearError, process, setProcess, getAllComics, getComic, getCharacterByName}
 }
 
 export default useMarvelService;

@@ -2,19 +2,14 @@ import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import useMarvelService from '../../services/MarvelService';
-import Spinner from '../../components/spinner/spinner';
-import ErrorMessage from '../../components/errorMessage/errorMessage';
+import setContent from '../../utils/setContent';
 import AppBanner from "../appBanner/AppBanner";
-
-// Хотелось бы вынести функцию по загрузке данных как отдельный аргумент
-// Но тогда мы потеряем связь со стэйтами загрузки и ошибки
-// А если вынесем их все в App.js - то они будут одни на все страницы
 
 const SinglePage = ({Component, dataType}) => {
         const { id, comicId } = useParams();
         const currentId = id || comicId;
         const [data, setData] = useState(null);
-        const {loading, error, getComic, getCharacter, clearError} = useMarvelService();
+        const {getComic, getCharacter, clearError, process, setProcess} = useMarvelService();
 
         useEffect(() => {
             updateData()
@@ -25,10 +20,12 @@ const SinglePage = ({Component, dataType}) => {
 
             switch (dataType) {
                 case 'comic':
-                    getComic(currentId).then(onDataLoaded);
+                    getComic(currentId).then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
                     break;
                 case 'character':
-                    getCharacter(currentId).then(onDataLoaded);
+                    getCharacter(currentId).then(onDataLoaded)
+                    .then(() => setProcess('confirmed'));
                     break;
                 default:
                     break;
@@ -39,16 +36,10 @@ const SinglePage = ({Component, dataType}) => {
             setData(data);
         }
 
-        const errorMessage = error ? <ErrorMessage/> : null;
-        const spinner = loading ? <Spinner/> : null;
-        const content = !(loading || error || !data) ? <Component data={data}/> : null;
-
         return (
             <>
                 <AppBanner/>
-                {errorMessage}
-                {spinner}
-                {content}
+                {setContent(process, Component, data)}
             </>
         )
 }
