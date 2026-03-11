@@ -11,23 +11,27 @@ import AppBanner from "../appBanner/AppBanner";
 // А если вынесем их все в App.js - то они будут одни на все страницы
 
 const SinglePage = ({Component, dataType}) => {
-        const {id} = useParams();
+        const { id, comicId } = useParams();
+        const currentId = id || comicId;
         const [data, setData] = useState(null);
         const {loading, error, getComic, getCharacter, clearError} = useMarvelService();
 
         useEffect(() => {
             updateData()
-        }, [id])
+        }, [currentId])
 
         const updateData = () => {
             clearError();
 
             switch (dataType) {
                 case 'comic':
-                    getComic(id).then(onDataLoaded);
+                    getComic(currentId).then(onDataLoaded);
                     break;
                 case 'character':
-                    getCharacter(id).then(onDataLoaded);
+                    getCharacter(currentId).then(onDataLoaded);
+                    break;
+                default:
+                    break;
             }
         }
 

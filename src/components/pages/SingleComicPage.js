@@ -8,7 +8,6 @@ import useMarvelService from '../../services/MarvelService';
 const SingleComicPage = () => {
     const {comicId} = useParams(); // key : value
     const [comic, setComic] = useState(null);
-
     const {loading, error, getComic, clearError} = useMarvelService();
 
     useEffect(() => {
