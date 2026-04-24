@@ -9,7 +9,7 @@ A React-based web application for exploring Marvel characters, comics, and relat
 
 ## 🚀 About
 
-This project is a frontend application built with React that allows users to browse and search Marvel characters and view detailed information about them.
+Marvel App is a frontend project built with React that allows users to search Marvel characters, view detailed character information, and explore related comics.
 
 The app demonstrates:
 
@@ -17,7 +17,8 @@ The app demonstrates:
 - Routing and navigation  
 - Dynamic UI rendering  
 
-Applications like this typically use the official Marvel API to fetch real-time data about characters, comics, and series.
+
+The project focuses on working with external APIs, dynamic routing, reusable components, and responsive UI.
 
 ---
 
@@ -36,4 +37,12 @@ Applications like this typically use the official Marvel API to fetch real-time 
 - JavaScript (ES6+)  
 - CSS / SCSS  
 - REST API (Marvel API)  
-- React Router  
+- React Router
+
+- ## Run locally
+
+```bash
+git clone https://github.com/itssonyamisyura/marvel_app.git
+cd marvel_app
+npm install
+npm start
