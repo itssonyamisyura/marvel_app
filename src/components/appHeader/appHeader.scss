@@ -28,14 +28,23 @@
     &__menu {
         ul {
             display: flex;
+            align-items: center;
             justify-content: space-between;
             font-weight: bold;
             font-size: 24px;
             line-height: 32px;
             li {
                 margin: 0 8px;
-                a:hover {
-                    color: $main-color;
+                a {
+                    &:hover {
+                        color: $main-color;
+                    }
+                    @media (max-width: $bp-md) {
+                        min-height: 44px;
+                        display: inline-flex;
+                        align-items: center;
+                        padding: 0 4px;
+                    }
                 }
             }
 

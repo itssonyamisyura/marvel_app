@@ -1,0 +1,96 @@
+@import '../../style/variables.scss';
+
+.char-dialog {
+    &__backdrop {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.55);
+        z-index: 100;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        animation: backdropFadeIn 0.2s ease;
+
+        // On desktop the dialog is never shown via CSS,
+        // but just in case — center it instead of bottom-sheet
+        @media (min-width: #{$bp-md + 1}) {
+            align-items: center;
+        }
+    }
+
+    &__panel {
+        position: relative;
+        background: #fff;
+        width: 100%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 16px 16px 0 0;
+        animation: slideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+        padding-top: 20px;
+
+        // Center on desktop
+        @media (min-width: #{$bp-md + 1}) {
+            border-radius: 16px;
+            animation: scaleIn 0.22s ease;
+            padding-top: 0;
+        }
+
+        // Remove the normal char__info margin-top inside dialog
+        .char__info {
+            margin-top: 0;
+            box-shadow: none;
+        }
+    }
+
+    &__handle {
+        width: 40px;
+        height: 4px;
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: 99px;
+        margin: 0 auto 12px;
+
+        // Hidden on desktop (it's a centered modal there, not a sheet)
+        @media (min-width: #{$bp-md + 1}) {
+            display: none;
+        }
+    }
+
+    &__close {
+        position: absolute;
+        top: 14px;
+        right: 14px;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(0, 0, 0, 0.08);
+        color: $dark;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        transition: background 0.2s;
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.16);
+        }
+    }
+}
+
+@keyframes backdropFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to   { opacity: 1; transform: scale(1); }
+}

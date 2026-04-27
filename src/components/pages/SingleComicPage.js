@@ -6,9 +6,9 @@ import ErrorMessage from '../errorMessage/errorMessage';
 import useMarvelService from '../../services/MarvelService';
 
 const SingleComicPage = () => {
-    const {comicId} = useParams(); // key : value
+    const { comicId } = useParams(); // key : value
     const [comic, setComic] = useState(null);
-    const {loading, error, getComic, clearError} = useMarvelService();
+    const { loading, error, getComic, clearError } = useMarvelService();
 
     useEffect(() => {
         updateComic()
@@ -21,30 +21,30 @@ const SingleComicPage = () => {
             .then(onComicLoaded)
     }
 
-    const onComicLoaded = (comic) => { 
+    const onComicLoaded = (comic) => {
         setComic(comic);
     }
 
 
-    const errorMessage = error ? <ErrorMessage/> : null;
-    const spinner = loading ? <Spinner/> : null;
-    const content = !(error || loading || !comic) ? <View comic={comic}/> : null;
+    const errorMessage = error ? <ErrorMessage /> : null;
+    const spinner = loading ? <Spinner /> : null;
+    const content = !(error || loading || !comic) ? <View comic={comic} /> : null;
 
     return (
-       <>
+        <>
             {errorMessage}
             {spinner}
             {content}
-       </>
+        </>
     )
 }
 
-const View = ({comic}) => {
-    const {description, title, price, thumbnail, pageCount} = comic;
+const View = ({ comic }) => {
+    const { description, title, price, thumbnail, pageCount } = comic;
 
     return (
         <div className="single-comic">
-            <img src={thumbnail} alt={title} className="single-comic__img"/>
+            <img src={thumbnail} alt={title} className="single-comic__img" />
             <div className="single-comic__info">
                 <h2 className="single-comic__name">{title}</h2>
                 <p className="single-comic__descr">{description}</p>

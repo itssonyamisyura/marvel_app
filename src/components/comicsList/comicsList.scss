@@ -12,15 +12,18 @@
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(160px, 225px));
         justify-content: space-between;
+        column-gap: 25px;
         row-gap: 55px;
 
         @media (max-width: $bp-md) {
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            column-gap: 20px;
             row-gap: 35px;
         }
 
         @media (max-width: $bp-sm) {
             grid-template-columns: repeat(2, 1fr);
+            column-gap: 14px;
             row-gap: 25px;
         }
     }

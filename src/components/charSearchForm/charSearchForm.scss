@@ -9,7 +9,13 @@
       position: relative;
       z-index: 5;
       background-color: #fff;
+
+      // On mobile the search form shows below the char grid (full width)
+      @media (max-width: $bp-md) {
+        display: block;
+      }
     }
+
     &-label {
       display: block;
       font-weight: bold;
@@ -17,11 +23,13 @@
       line-height: 24px;
       color: #000;
     }
+
     &-wrapper {
       margin-top: 15px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       input {
         padding: 0 10px;
         width: 250px;
@@ -36,11 +44,13 @@
         flex-direction: column;
         align-items: stretch;
         gap: 12px;
+
         input {
           width: 100%;
         }
       }
     }
+
     &-error {
       margin-top: 25px;
       font-weight: bold;
@@ -48,9 +58,11 @@
       line-height: 24px;
       color: $main-color;
     }
+
     &-critical-error {
       margin-top: 25px;
     }
+
     &-success {
       font-weight: bold;
       font-size: 18px;
