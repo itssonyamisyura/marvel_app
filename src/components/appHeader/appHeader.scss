@@ -4,6 +4,13 @@
     &__header {
         display: flex;
         justify-content: space-between;
+        align-items: center;
+
+        @media (max-width: $bp-md) {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
     }
     &__title {
         font-weight: bold;
@@ -11,6 +18,11 @@
         line-height: 37px;
         span {
             color: $main-color;
+        }
+
+        @media (max-width: $bp-sm) {
+            font-size: 22px;
+            line-height: 28px;
         }
     }
     &__menu {
@@ -25,6 +37,11 @@
                 a:hover {
                     color: $main-color;
                 }
+            }
+
+            @media (max-width: $bp-sm) {
+                font-size: 18px;
+                line-height: 24px;
             }
         }
     }

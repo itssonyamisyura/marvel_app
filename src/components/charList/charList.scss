@@ -7,26 +7,57 @@
     grid-template-columns: 650px 425px;
     column-gap: 25px;
     align-items: start;
+
+    @media (max-width: $bp-lg) {
+      grid-template-columns: 1fr;
+      column-gap: 0;
+    }
+
+    @media (max-width: $bp-md) {
+      margin-top: 30px;
+    }
   }
   &__grid {
     display: grid;
     grid-template-columns: repeat(3, 200px);
     column-gap: 25px;
     row-gap: 30px;
+
+    @media (max-width: $bp-lg) {
+      grid-template-columns: repeat(3, 1fr);
+      column-gap: 16px;
+    }
+
+    @media (max-width: $bp-md) {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 14px;
+      row-gap: 20px;
+    }
+
+    @media (max-width: $bp-sm) {
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 10px;
+      row-gap: 16px;
+    }
   }
   &__item {
-    width: 200px;
-    height: 318px;
+    width: 100%;
+    height: auto;
+    min-height: 250px;
     background-color: $dark;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.25);
     padding: 15px;
     cursor: pointer;
     transition: 0.3s transform;
     img {
-      width: 200px;
+      width: calc(100% + 30px);
       height: 200px;
       object-fit: cover;
       transform: translate(-15px, -15px);
+
+      @media (max-width: $bp-sm) {
+        height: 140px;
+      }
     }
     &_selected {
       box-shadow: 0 5px 20px $main-color;
@@ -53,5 +84,10 @@
     line-height: 29px;
     text-transform: uppercase;
     color: #fff;
+
+    @media (max-width: $bp-sm) {
+      font-size: 14px;
+      line-height: 18px;
+    }
   }
 }

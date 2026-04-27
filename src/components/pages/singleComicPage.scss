@@ -6,9 +6,22 @@
     grid-template-columns: 293px 550px auto;
     column-gap: 50px;
     align-items: start;
+
+    @media (max-width: $bp-lg) {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        row-gap: 20px;
+    }
+
     &__img {
         width: 293px;
         height: 450px;
+
+        @media (max-width: $bp-lg) {
+            width: 100%;
+            max-width: 293px;
+            height: auto;
+        }
     }
     &__name {
         font-weight: bold;
@@ -34,6 +47,10 @@
         line-height: 24px;
         &:hover {
             color: $main-color;
+        }
+
+        @media (max-width: $bp-lg) {
+            justify-self: start;
         }
     }
 }
