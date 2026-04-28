@@ -23,8 +23,9 @@
         background: #fff;
         width: 100%;
         max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
+        // overflow MUST be visible so the close button isn't clipped
+        // by border-radius + overflow-y on the same element
+        overflow: visible;
         border-radius: 16px 16px 0 0;
         animation: slideUp 0.28s cubic-bezier(0.32, 0.72, 0, 1);
         padding-top: 20px;
@@ -35,11 +36,32 @@
             animation: scaleIn 0.22s ease;
             padding-top: 0;
         }
+    }
+
+    // Inner scrollable wrapper — keeps overflow away from border-radius
+    &__scroll {
+        max-height: calc(90vh - 36px);
+        overflow-y: auto;
+        border-radius: 0 0 0 0;
 
         // Remove the normal char__info margin-top inside dialog
         .char__info {
             margin-top: 0;
             box-shadow: none;
+        }
+
+        // Show full character image — no cropping
+        .char__basics img {
+            width: 150px;
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: cover;
+
+            @media (max-width: $bp-sm) {
+                width: 100%;
+                height: auto;
+                aspect-ratio: unset;
+            }
         }
     }
 
@@ -58,24 +80,29 @@
 
     &__close {
         position: absolute;
-        top: 14px;
-        right: 14px;
-        width: 32px;
-        height: 32px;
+        top: 20px;
+        right: 16px;
+        width: 36px;
+        height: 36px;
+        aspect-ratio: 1;
         border-radius: 50%;
         border: none;
-        background: rgba(0, 0, 0, 0.08);
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
         color: $dark;
         font-size: 14px;
+        line-height: 1;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        z-index: 1;
-        transition: background 0.2s;
+        flex-shrink: 0;
+        z-index: 10;
+        transition: background 0.2s, box-shadow 0.2s;
 
         &:hover {
-            background: rgba(0, 0, 0, 0.16);
+            background: #f5f5f5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
     }
 }
